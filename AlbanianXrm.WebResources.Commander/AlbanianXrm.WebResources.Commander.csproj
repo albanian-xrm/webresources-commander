@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFrameworks>net8.0;net48</TargetFrameworks>
+	<SignAssembly>True</SignAssembly>
+	<AssemblyOriginatorKeyFile>AlbanianXrm.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<InternalsVisibleTo Include="AlbanianXrm.WebResources.Commander.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001004d3c5d9543af2510168db8cba6d16c42421d7c68e358f40163130b1325056b397b9cd13fdf0e3cd9dfe258f8b806f5795d052399ecf328ab38fc89016274aefde81fbbf43a4afec1d34d9f3a70e95ebc070f57922fbbf745c2ddb7b2cf703127007780ae7ddbcf9ac91d807d853f3356834a8c3f65787459cf4fb140cac5ffbe" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	<PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="8.0.0" />
+	<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client">
+      <Version>1.1.17</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+	<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies">
+	  <Version>9.0.2.52</Version>
+	</PackageReference>
+  </ItemGroup>
+</Project>
