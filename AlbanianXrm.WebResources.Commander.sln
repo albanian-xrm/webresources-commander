@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlbanianXrm.WebResources.Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AA82FA5A-A6F3-4C3E-A7F8-167751655BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlbanianXrm.WebResources.Commander.Tests", "AlbanianXrm.WebResources.Commander.Tests\AlbanianXrm.WebResources.Commander.Tests.csproj", "{E12AD571-26BC-47E1-BD9D-663AF6BB26EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlbanianXrm.WebResources.Commander.Tests", "AlbanianXrm.WebResources.Commander.Tests\AlbanianXrm.WebResources.Commander.Tests.csproj", "{E12AD571-26BC-47E1-BD9D-663AF6BB26EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlbanianXrm.WebResources.XrmToolBox", "AlbanianXrm.WebResources.XrmToolBox\AlbanianXrm.WebResources.XrmToolBox.csproj", "{AE7092D0-36F6-44CF-A299-F0A67E2FAFFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlbanianXrm.WebResources.XrmToolBoxTool", "AlbanianXrm.WebResources.XrmToolBoxTool\AlbanianXrm.WebResources.XrmToolBoxTool.csproj", "{2414C68A-377F-4C5F-A74D-D460FE654A8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,14 @@ Global
 		{E12AD571-26BC-47E1-BD9D-663AF6BB26EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E12AD571-26BC-47E1-BD9D-663AF6BB26EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E12AD571-26BC-47E1-BD9D-663AF6BB26EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE7092D0-36F6-44CF-A299-F0A67E2FAFFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE7092D0-36F6-44CF-A299-F0A67E2FAFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE7092D0-36F6-44CF-A299-F0A67E2FAFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE7092D0-36F6-44CF-A299-F0A67E2FAFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2414C68A-377F-4C5F-A74D-D460FE654A8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2414C68A-377F-4C5F-A74D-D460FE654A8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2414C68A-377F-4C5F-A74D-D460FE654A8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2414C68A-377F-4C5F-A74D-D460FE654A8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

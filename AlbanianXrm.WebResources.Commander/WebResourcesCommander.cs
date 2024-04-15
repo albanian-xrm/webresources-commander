@@ -9,13 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace AlbanianXrm.WebResources
 {
     public class WebResourcesCommander
     {
-        private IOrganizationService service;
-        private RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
+        private readonly IOrganizationService service;
+        private readonly RecyclableMemoryStreamManager memoryStreamManager = new RecyclableMemoryStreamManager();
         internal WebResourcesCommanderOptions options;
         internal Matcher matcher;
         internal WebResourceRepository webResourceRepository;
@@ -46,6 +47,34 @@ namespace AlbanianXrm.WebResources
                 SaveWebResourcesInMemory();
             }
             CalculateOperations();
+            ApplyPendingOperations();
+
+        }
+
+        public void ApplyPendingOperations()
+        {
+            foreach (var operation in pendingOperations.Where(o => o.Value == Operation.Delete))
+            {
+                webResourceRepository.DeleteWebResource(
+                    webResources.Find(w => w.Name.Equals(operation.Key,
+                    StringComparison.CurrentCultureIgnoreCase)));
+            }
+            foreach (var operation in pendingOperations.Where(o => o.Value == Operation.Create))
+            {
+                string content;
+                using (var reader = new StreamReader(localWebResources[operation.Key]))
+                {
+                    content = Convert.ToBase64String(Encoding.UTF8.GetBytes(reader.ReadToEnd()));                   
+                }
+                var webResource = new WebResource()
+                {
+                    Name = operation.Key,
+                    WebResourceType = Webresource.GetTypeFromExtension(Path.GetExtension(operation.Key),
+                                        allowUnsupported: true),
+                    Content =  content,
+                };
+                webResourceRepository.CreateWebResourceAndAddToSolution(webResource, options.Solution);
+            }
         }
 
         public void CalculateOperations()
@@ -60,7 +89,7 @@ namespace AlbanianXrm.WebResources
                 {
                     if (localWebResources.ContainsKey(webResource.Name))
                     {
-                        var checksumLocalFile = FileChecksum.GetSHA1Checksum(Path.Combine(options.SourceFolder, webResource.Name));
+                        var checksumLocalFile = FileChecksum.GetSHA1Checksum(localWebResources[webResource.Name]);
                         string checksumWebFile = FileChecksum.GetSHA1Checksum(tempWebResources[webResource.Name]);
                         pendingOperations.Add(webResource.Name, checksumLocalFile.Equals(checksumWebFile) ? Operation.NoAction : Operation.Update);
                     }
@@ -80,7 +109,7 @@ namespace AlbanianXrm.WebResources
                 {
                     if (localWebResources.ContainsKey(webResource.Name))
                     {
-                        var checksumLocalFile = FileChecksum.GetSHA1Checksum(Path.Combine(options.SourceFolder, webResource.Name));
+                        var checksumLocalFile = FileChecksum.GetSHA1Checksum(localWebResources[webResource.Name]);
                         string checksumWebFile = FileChecksum.GetSHA1Checksum(memoryWebResources[webResource.Name]);
                         pendingOperations.Add(webResource.Name, checksumLocalFile.Equals(checksumWebFile) ? Operation.NoAction : Operation.Update);
                     }
@@ -101,7 +130,7 @@ namespace AlbanianXrm.WebResources
             foreach (var file in result.Files)
             {
                 localWebResources.Add(
-                    string.IsNullOrEmpty(options.Prefix) ? file.Path : Path.Combine(options.Prefix, file.Path),
+                    string.IsNullOrEmpty(options.Prefix) ? file.Path.Replace("\\", "/") : Path.Combine(options.Prefix, file.Path).Replace("\\", "/"),
                     Path.Combine(options.SourceFolder, file.Path));
             }
         }
@@ -111,7 +140,7 @@ namespace AlbanianXrm.WebResources
             memoryWebResources.Clear();
             foreach (var webResource in webResources)
             {
-                var byteContent = Convert.FromBase64String(webResource.Content);
+                var byteContent = webResource.Content!=null ? Convert.FromBase64String(webResource.Content) : new byte[] { };
                 var stream = memoryStreamManager.GetStream(byteContent);
                 stream.Seek(0, SeekOrigin.Begin);
                 memoryWebResources.Add(webResource.Name, stream);

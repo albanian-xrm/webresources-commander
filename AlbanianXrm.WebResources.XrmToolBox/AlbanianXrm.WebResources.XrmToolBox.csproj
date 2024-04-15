@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>net48</TargetFramework>
+	  <OutputType>Library</OutputType>
+	  <AppDesignerFolder>Properties</AppDesignerFolder>
+	  <FileAlignment>512</FileAlignment>
+	  <Deterministic>true</Deterministic>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageIcon>Logo_80x80.png</PackageIcon>
+	  <Configurations>Debug;Release;Azure Pipelines</Configurations>
+  </PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure Pipelines|AnyCPU'">
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<LangVersion>7.3</LangVersion>
+		<ErrorReport>prompt</ErrorReport>
+		<CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="XrmToolBoxPackage" Version="1.2023.10.67" />
+		<PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" Condition="'$(Configuration)'=='Debug'" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\AlbanianXrm.WebResources.XrmToolBoxTool\AlbanianXrm.WebResources.XrmToolBoxTool.csproj" />
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="IF NOT EXIST &quot;$(TargetDir)XrmToolBox&quot; mkdir &quot;$(TargetDir)XrmToolBox&quot;&#xD;&#xA;IF NOT EXIST &quot;$(TargetDir)XrmToolBox\Plugins&quot; mkdir &quot;$(TargetDir)XrmToolBox\Plugins&quot;&#xD;&#xA;IF NOT EXIST &quot;$(TargetDir)XrmToolBox\Plugins\AlbanianXrm.WebResources.XrmToolBox&quot; mkdir $(TargetDir)XrmToolBox\Plugins\AlbanianXrm.WebResources.XrmToolBox&#xD;&#xA;move /Y &quot;$(TargetDir)AlbanianXrm.WebResources.XrmToolBox.dll&quot; &quot;$(TargetDir)XrmToolBox\Plugins&quot; &#xD;&#xA;move /Y &quot;$(TargetDir)AlbanianXrm.WebResources.XrmToolBoxTool.dll&quot; &quot;$(TargetDir)XrmToolBox\Plugins\AlbanianXrm.WebResources.XrmToolBox\&quot;&#xD;&#xA;&#xD;&#xA;IF &quot;$(ConfigurationName)&quot;==&quot;Debug&quot; (&#xD;&#xA;    move /Y &quot;$(TargetDir)AlbanianXrm.WebResources.XrmToolBox.pdb&quot; &quot;$(TargetDir)XrmToolBox\Plugins&quot; &#xD;&#xA;    move /Y &quot;$(TargetDir)AlbanianXrm.WebResources.XrmToolBoxTool.pdb&quot; &quot;$(TargetDir)XrmToolBox\Plugins\AlbanianXrm.WebResources.XrmToolBox\&quot;&#xD;&#xA;)" />
+	</Target>
+</Project>
